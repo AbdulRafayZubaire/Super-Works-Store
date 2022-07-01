@@ -36,8 +36,10 @@ const CartScreen = () => {
     
     dispatch(removeFromCart(id))
   };
+
+
   const checkoutHandler = () => {
-    navigate('/login?redirect=shipping')
+    navigate(`/login?redirect=/shipping`)
   }
 
   return (
@@ -47,7 +49,7 @@ const CartScreen = () => {
           <h1>Shopping Cart</h1>
           {cartItems.length === 0 ? (
              
-             <Message variant='danger' text='Cart is Empty' link='/' linktext='Go Back'/>
+             <Message variant='dark'>Your cart is Empty <Link to='/'>Go Back</Link> </Message>
              
           ) : (
             <ListGroup variant="flush">

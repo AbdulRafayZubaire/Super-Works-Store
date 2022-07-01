@@ -1,12 +1,11 @@
 import React from 'react'
 import { Alert} from 'react-bootstrap'
-import { Link } from 'react-router-dom'
 
 
-const Message = ({variant, text, link, linktext, id}) => {
+const Message = ({variant, children}) => {
   return (
     <Alert variant={variant}>
-        <span>{`${text}`} <Link to={`${link}`}>{`${linktext}`}</Link></span>
+        <span>{children}</span>
     </Alert>
   )
 }

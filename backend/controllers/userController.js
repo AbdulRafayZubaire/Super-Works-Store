@@ -26,6 +26,7 @@ const authUser = asyncHandler(async (req, res) => {
 const userProfile = asyncHandler(async (req, res) => {
   const user = req.user;
 
+  console.log('inside function');
   if (user) {
     res.json({
       _id: user.id,
@@ -39,18 +40,47 @@ const userProfile = asyncHandler(async (req, res) => {
   }
 });
 
+// PUT /api/users/profile    --> update user route
+const updateUserProfile = asyncHandler(async (req, res) => {
+
+  const user = await User.findById(req.user.id);
+  
+
+  if (user) {
+    
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email
+    if(req.body.password){
+      
+      user.password = req.body.password
+    }   
+        const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(user.id),
+    });
+  } else {
+    res.status(404);
+    throw new Error("User Not Found");
+  }
+});
+
 // POST /api/users
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-
-  const userExists = await User.find({ email });
+  console.log(req.body);
+  const userExists = await User.findOne({ email });
 
   if (userExists) {
     res.status(400);
     throw new Error("User already exists");
   }
 
-  const user = await User.create(req.body);
+  const user = await User.create({name, email, password});
 
   if (user) {
     res.status(201)
@@ -67,4 +97,4 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser, userProfile, registerUser };
+export { authUser, userProfile, registerUser, updateUserProfile };
