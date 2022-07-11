@@ -12,6 +12,11 @@ import ShippingScreen from "./screens/ShippingScreen";
 import PaymentScreen from "./screens/PaymentScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
+import UserListScreen from "./screens/UserListScreen";
+import UserEditScreen from "./screens/UserEditScreen";
+import ProductListScreen from "./screens/ProductListScreen";
+import ProductEditScreen from "./screens/ProductEditScreen";
+import OrderListScreen from "./screens/OrderListScreen";
 
 const App = () => {
   return (
@@ -19,6 +24,11 @@ const App = () => {
       <Router>
         <Header />
         <Routes>
+          <Route path="/admin/productList" element={<ProductListScreen />} exact />
+          <Route path="/admin/product/:id/edit" element={<ProductEditScreen />} exact/>
+          <Route path="/admin/userList" element={<UserListScreen />} exact />
+          <Route path="/admin/user/:id/edit" element={<UserEditScreen />} exact />
+          <Route path="/admin/orderList" element={<OrderListScreen />} exact />
           <Route path="/order/:id" element={<OrderScreen />} exact />
           <Route path="/placeorder" element={<PlaceOrderScreen />} exact />
           <Route path="/shipping" element={<ShippingScreen />} exact />
