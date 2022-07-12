@@ -2,9 +2,25 @@ import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
 
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : null;
+
+  const products = await Product.find({ ...keyword });
 
   // throw new Error('error occured')
+  res.status(200).json(products);
+});
+
+const getTopProducts = asyncHandler(async (req, res) => {
+  
+  const products = await Product.find({}).sort({rating: -1}).limit(3)
+
   res.status(200).json(products);
 });
 
@@ -33,7 +49,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
-  console.log("hello");
+  
   const { name, price, description, image, brand, category, countInStock } =
     req.body;
 
@@ -83,28 +99,28 @@ const createProductReview = asyncHandler(async (req, res) => {
       (rev) => rev.user.toString() === req.user._id.toString()
     );
 
-      if(!alreadyReviewed){
-        const review = {
-          name: req.user.name,
-          rating: Number(rating),
-          comment,
-          user: req.user._id
-        } 
+    if (!alreadyReviewed) {
+      const review = {
+        name: req.user.name,
+        rating: Number(rating),
+        comment,
+        user: req.user._id,
+      };
 
-        product.reviews.push(review);
+      product.reviews.push(review);
 
-        product.numReviews = product.reviews.length;
+      product.numReviews = product.reviews.length;
 
-        product.rating = product.reviews.reduce((acc, item)=> item.rating + acc, 0) / product.reviews.length
+      product.rating =
+        product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+        product.reviews.length;
 
-        await product.save();
-        res.status(201).json({message: 'Review added'})
-      }
-      else{
-        res.status(400)
-        throw new Error('Product Already Reviewed')
-      }
-
+      await product.save();
+      res.status(201).json({ message: "Review added" });
+    } else {
+      res.status(400);
+      throw new Error("Product Already Reviewed");
+    }
   } else {
     res.status(404);
     throw new Error("Product Not Found");
@@ -118,4 +134,5 @@ export {
   updateProduct,
   createProduct,
   createProductReview,
+  getTopProducts
 };

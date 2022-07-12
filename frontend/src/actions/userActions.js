@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import { async } from "regenerator-runtime";
-import { ORDER_DETAILS_RESET, ORDER_LIST_MY_RESET } from "../constants/orderConstants";
+import {
+  ORDER_DETAILS_RESET,
+  ORDER_LIST_MY_RESET,
+} from "../constants/orderConstants";
 import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
@@ -69,9 +69,7 @@ const logout = () => (dispatch) => {
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
   dispatch({ type: ORDER_LIST_MY_RESET });
-  dispatch({type: ORDER_DETAILS_RESET})
-
-  Navigate('/')
+  dispatch({ type: ORDER_DETAILS_RESET });
 };
 
 const register = (name, email, password) => async (dispatch) => {
@@ -185,7 +183,7 @@ const listUsers = () => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
-    const message =
+    // const message =
       // if (message === 'Not authorized, token failed') {
       //   dispatch(logout())
       // }
@@ -215,7 +213,7 @@ const deleteUser = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.delete(`/api/users/${id}`, config);
+    await axios.delete(`/api/users/${id}`, config);
 
     dispatch({
       type: USER_DELETE_SUCCESS,
@@ -235,40 +233,40 @@ const updateUser = (user) => async (dispatch, getState) => {
   try {
     dispatch({
       type: USER_UPDATE_REQUEST,
-    })
+    });
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
-        'Content-Type': 'application/json',
-        'auth-token': `Bearer ${userInfo.token}`,
+        "Content-Type": "application/json",
+        "auth-token": `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
-    const { data } = await axios.put(`/api/users/${user._id}`, user, config)
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
 
-    dispatch({ type: USER_UPDATE_SUCCESS })
+    dispatch({ type: USER_UPDATE_SUCCESS });
 
-    dispatch({ type: USER_DETAILS_SUCCESS, payload: data })
+    dispatch({ type: USER_DETAILS_SUCCESS, payload: data });
 
-    dispatch({ type: USER_DETAILS_RESET })
+    dispatch({ type: USER_DETAILS_RESET });
   } catch (error) {
     const message =
       error.response && error.response.data.message
         ? error.response.data.message
-        : error.message
-    if (message === 'Not authorized, token failed') {
-      dispatch(logout())
+        : error.message;
+    if (message === "Not authorized, token failed") {
+      dispatch(logout());
     }
     dispatch({
       type: USER_UPDATE_FAIL,
       payload: message,
-    })
+    });
   }
-}
+};
 
 export {
   login,
@@ -278,5 +276,5 @@ export {
   userProfileUpdate,
   listUsers,
   deleteUser,
-  updateUser
+  updateUser,
 };
