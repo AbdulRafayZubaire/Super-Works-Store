@@ -47,8 +47,9 @@ const ProductScreen = () => {
   useEffect(() => {
 
     if(successReview){
-      setComment('');
       setRating(0);
+      setComment('');
+      dispatch(listProductDetails(params.id))
     } 
     if (!product._id || product._id !== params.id) {
       dispatch(listProductDetails(params.id))
