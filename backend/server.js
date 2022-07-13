@@ -49,7 +49,7 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 app.listen(
-  5000,
+  PORT,
   console.log(
     `server listening in ${process.env.NODE_ENV} mode on port ${PORT}...`.yellow
     )
