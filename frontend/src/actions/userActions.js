@@ -27,6 +27,9 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
+  USER_LOGIN_GOOGLE_REQUEST,
+  USER_LOGIN_GOOGLE_SUCCESS,
+  USER_LOGIN_GOOGLE_FAILURE,
 } from "../constants/userConstants";
 
 const login = (email, password) => async (dispatch) => {
@@ -53,6 +56,41 @@ const login = (email, password) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.mesasge,
+    });
+  }
+};
+
+const googleAuth = (name, email) => async (dispatch) => {
+  try {
+    dispatch({
+      type: USER_LOGIN_GOOGLE_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      "/api/users/google",
+      { name, email },
+      config
+    );
+
+    console.log('Google Data', data);
+
+    dispatch({ type: USER_LOGIN_GOOGLE_SUCCESS, payload: data });
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+
+    localStorage.setItem("userInfo", JSON.stringify(data));
+  } catch (error) {
+    dispatch({
+      type: USER_LOGIN_GOOGLE_FAILURE,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -277,4 +315,5 @@ export {
   listUsers,
   deleteUser,
   updateUser,
+  googleAuth
 };

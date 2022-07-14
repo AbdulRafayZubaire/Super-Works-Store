@@ -17,10 +17,13 @@ import UserEditScreen from "./screens/UserEditScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const App = () => {
+  
   return (
     <>
+    <GoogleOAuthProvider>
       <Router>
         <Header />
         <Routes>
@@ -44,6 +47,7 @@ const App = () => {
         </Routes>
         <Footer />
       </Router>
+      </GoogleOAuthProvider>
     </>
   );
 };

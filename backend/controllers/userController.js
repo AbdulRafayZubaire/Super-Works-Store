@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
+import "dotenv";
 
 // POST api/usersl/login
 const authUser = asyncHandler(async (req, res) => {
@@ -41,19 +42,15 @@ const userProfile = asyncHandler(async (req, res) => {
 
 // PUT /api/users/profile    --> update user route
 const updateUserProfile = asyncHandler(async (req, res) => {
-
   const user = await User.findById(req.user.id);
-  
 
   if (user) {
-    
     user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email
-    if(req.body.password){
-      
-      user.password = req.body.password
-    }   
-        const updatedUser = await user.save();
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+    const updatedUser = await user.save();
 
     res.json({
       _id: updatedUser.id,
@@ -79,83 +76,128 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const user = await User.create({name, email, password});
+  const user = await User.create({ name, email, password });
 
   if (user) {
-    res.status(201)
+    res.status(201);
     res.json({
       _id: user.id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
     });
-  }
-  else{
+  } else {
     res.status(404);
-    throw new Error('Invalid User Data')
+    throw new Error("Invalid User Data");
   }
 });
 
+// POST /api/users/google
+const googleAuth = asyncHandler(async (req, res) => {
+  const { name, email } = req.body;
+  console.log(req.body);
+  const userExists = await User.findOne({ email });
+  console.log(userExists, "user Exists");
 
+  if (userExists) {
+    // res.status(201);
+    // throw new Error("User already exists");
+    res.status(201);
+    res.json({
+      _id: userExists.id,
+      name: userExists.name,
+      email: userExists.email,
+      isAdmin: userExists.isAdmin,
+      token: generateToken(userExists.id),
+    });
+  } 
+  else {
+    const user = await User.create({
+      name,
+      email,
+      password: process.env.GOOGLE_PASSWORD,
+    });
+
+    if (user) {
+      res.status(201);
+      res.json({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      });
+    } else {
+      res.status(404);
+      throw new Error("Invalid User Data");
+    }
+  }
+});
 
 // -------------------- ADMIN ONLY ROUTES -----------------------
 
 // getting All of the users
-const getUsers = asyncHandler (async (req, res)=>{
-
+const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({});
 
   res.status(200).json(users);
-})
+});
 
 // deleting User Via Admin Account
-const deleteUser = asyncHandler(async(req, res)=>{
-
+const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
-  if(user){
+  if (user) {
     await user.remove();
-    res.json({message: 'User removed Successfully'})
+    res.json({ message: "User removed Successfully" });
+  } else {
+    res.status(404);
+    throw new Error("User not Found");
   }
-  else{
-    res.status(404);  
-    throw new Error('User not Found')
-  }
-})
+});
 
 // Getting users data
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password')
+  const user = await User.findById(req.params.id).select("-password");
 
   if (user) {
-    res.json(user)
+    res.json(user);
   } else {
-    res.status(404)
-    throw new Error('User not found')
+    res.status(404);
+    throw new Error("User not found");
   }
-})
+});
 
 // Update User Endpoint via Admin Acount
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id)
+  const user = await User.findById(req.params.id);
 
   if (user) {
-    user.name = req.body.name || user.name
-    user.email = req.body.email || user.email
-    user.isAdmin = req.body.isAdmin
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin;
 
-    const updatedUser = await user.save()
+    const updatedUser = await user.save();
 
     res.json({
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
-    })
+    });
   } else {
-    res.status(404)
-    throw new Error('User not found')
+    res.status(404);
+    throw new Error("User not found");
   }
-})
+});
 
-export { authUser, userProfile, registerUser, updateUserProfile, getUsers, deleteUser, updateUser, getUserById };
+export {
+  authUser,
+  userProfile,
+  registerUser,
+  updateUserProfile,
+  getUsers,
+  deleteUser,
+  updateUser,
+  getUserById,
+  googleAuth,
+};

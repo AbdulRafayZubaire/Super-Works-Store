@@ -11,6 +11,9 @@ import {
   USER_LIST_RESET,
   USER_LIST_SUCCESS,
   USER_LOGIN_FAIL,
+  USER_LOGIN_GOOGLE_FAILURE,
+  USER_LOGIN_GOOGLE_REQUEST,
+  USER_LOGIN_GOOGLE_SUCCESS,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
   USER_LOGOUT,
@@ -39,10 +42,37 @@ const userLoginReducer = (state = {}, action) => {
     }
     case USER_LOGOUT:
       return {};
+    case USER_LOGIN_GOOGLE_REQUEST: {
+      return { loading: true };
+    }
+    case USER_LOGIN_GOOGLE_SUCCESS: {
+      return { loading: false, userInfo: action.payload };
+    }
+    case USER_LOGIN_GOOGLE_FAILURE: {
+      return { loading: false, error: action.payload };
+    }
     default:
       return state;
   }
 };
+
+// const googleAuthReducer = (state = {}, action) => {
+//   switch (action.type) {
+//     case USER_LOGIN_REQUEST: {
+//       return { loading: true };
+//     }
+//     case USER_LOGIN_SUCCESS: {
+//       return { loading: false, userInfo: action.payload };
+//     }
+//     case USER_LOGIN_FAIL: {
+//       return { loading: false, error: action.payload };
+//     }
+//     case USER_LOGOUT:
+//       return {};
+//     default:
+//       return state;
+//   }
+// };
 
 const userDetailsReducer = (state = { user: {} }, action) => {
   switch (action.type) {
@@ -115,32 +145,32 @@ const userListReducer = (state = { users: [] }, action) => {
 const userDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case USER_DELETE_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_DELETE_SUCCESS:
-      return { loading: false, success: true }
+      return { loading: false, success: true };
     case USER_DELETE_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     default:
-      return state
+      return state;
   }
-}
- 
+};
+
 const userUpdateReducer = (state = { user: {} }, action) => {
   switch (action.type) {
     case USER_UPDATE_REQUEST:
-      return { loading: true }
+      return { loading: true };
     case USER_UPDATE_SUCCESS:
-      return { loading: false, success: true }
+      return { loading: false, success: true };
     case USER_UPDATE_FAIL:
-      return { loading: false, error: action.payload }
+      return { loading: false, error: action.payload };
     case USER_UPDATE_RESET:
       return {
         user: {},
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
 export {
   userLoginReducer,
@@ -148,6 +178,6 @@ export {
   userDetailsReducer,
   userProfileUpdateReducer,
   userListReducer,
-  userDeleteReducer, 
-  userUpdateReducer
+  userDeleteReducer,
+  userUpdateReducer,
 };

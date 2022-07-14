@@ -6,15 +6,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { login } from "../actions/userActions";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import LoginButton from "../components/Login";
+import LogoutButton from "../components/Logout";
 
 const LoginScreen = () => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
   const userLogin = useSelector((state) => state.userLogin);
-  const {error, loading, userInfo} = userLogin
+  const { error, loading, userInfo } = userLogin;
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
@@ -35,9 +39,9 @@ const LoginScreen = () => {
 
   return (
     <FormContainer>
-        <h1>Sign In</h1>
-        {error && <Message variant='danger'>{error}</Message>}
-        {loading && <Loader />}
+      <h1>Sign In</h1>
+      {error && <Message variant="danger">{error}</Message>}
+      {loading && <Loader />}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="email" className="my-3">
           <Form.Label>Email Address</Form.Label>
@@ -73,6 +77,13 @@ const LoginScreen = () => {
           <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
             Rregister
           </Link>
+        </Col>
+      </Row>
+
+      <Row className="py-3">
+        <Col>
+        <h1>GOOGLE</h1>
+          <LoginButton />
         </Col>
       </Row>
     </FormContainer>

@@ -8,6 +8,7 @@ import {
   deleteUser,
   getUserById,
   updateUser,
+  googleAuth,
 } from "../controllers/userController.js";
 import { fetchUser, adminAuth } from "../middlewares/fetchUser.js";
 
@@ -20,6 +21,7 @@ router
   .put(fetchUser, updateUserProfile);
 
 router.route("/").post(registerUser).get(fetchUser, adminAuth, getUsers);
+router.route("/google").post(googleAuth);
 
 router
   .route("/:id")
