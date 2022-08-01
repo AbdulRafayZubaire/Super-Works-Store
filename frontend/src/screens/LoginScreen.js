@@ -55,7 +55,7 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
         <Form.Group controlId="password" className="my-3">
-          <Form.Label>Email Address</Form.Label>
+          <Form.Label>Password</Form.Label>
           <Form.Control
             type="string"
             value={password}
@@ -75,7 +75,7 @@ const LoginScreen = () => {
         <Col>
           New Customer?{" "}
           <Link to={redirect ? `/register?redirect=${redirect}` : "/register"}>
-            Rregister
+            Register
           </Link>
         </Col>
       </Row>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { CART_RESET_ITEMS } from "../constants/cardConstants";
 import {
   ORDER_DETAILS_RESET,
   ORDER_LIST_MY_RESET,
@@ -108,6 +109,7 @@ const logout = () => (dispatch) => {
   dispatch({ type: USER_DETAILS_RESET });
   dispatch({ type: ORDER_LIST_MY_RESET });
   dispatch({ type: ORDER_DETAILS_RESET });
+  dispatch({type: CART_RESET_ITEMS})
 };
 
 const register = (name, email, password) => async (dispatch) => {
