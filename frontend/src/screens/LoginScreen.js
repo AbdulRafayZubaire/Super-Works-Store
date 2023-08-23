@@ -81,9 +81,8 @@ const LoginScreen = () => {
       </Row>
 
       <Row className="py-3">
-        <Col>
-        <h1>GOOGLE</h1>
-          <LoginButton />
+        <Col> 
+          <LoginButton className="google-button"/>
         </Col>
       </Row>
     </FormContainer>

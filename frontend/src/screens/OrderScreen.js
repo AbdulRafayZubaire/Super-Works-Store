@@ -23,6 +23,7 @@ import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
 } from "../constants/orderConstants";
+import { CART_RESET_ITEMS } from "../constants/cardConstants";
 
 const OrderScreen = () => {
   const params = useParams();
@@ -35,6 +36,7 @@ const OrderScreen = () => {
 
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, loading, error } = orderDetails;
+  
 
   const orderPay = useSelector((state) => state.orderPay);
   const {
@@ -42,6 +44,7 @@ const OrderScreen = () => {
     success: successPay,
     error: errorPay,
   } = orderPay;
+  console.log("successPay", successPay);
 
   const orderDeliver = useSelector((state) => state.orderDeliver);
   const { loading: loadingDeliver, success: successDeliver, error: errorDeliver} = orderDeliver;
@@ -49,7 +52,7 @@ const OrderScreen = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  if (!loading) {
+  if (!loading && Object.keys(order).length > 0) {
     //   Calculate prices
     const addDecimals = (num) => {
       return (Math.round(num * 100) / 100).toFixed(2);
@@ -73,6 +76,8 @@ const OrderScreen = () => {
 
       dispatch({ type: ORDER_PAY_RESET });
       dispatch({ type: ORDER_DELIVER_RESET });
+      dispatch({ type: CART_RESET_ITEMS });
+
       dispatch(getOrderDetails(orderId));
     }
 
@@ -94,7 +99,7 @@ const OrderScreen = () => {
         <Loader />
       ) : error ? (
         <Message variant="danger">{error}</Message>
-      ) : (
+      ) : !loading && Object.keys(order).length > 0 && (
         <>
           <h1>Order {order._id}</h1>
           <Row>

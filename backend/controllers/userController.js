@@ -2,6 +2,9 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
 import "dotenv";
+import { v4 as uuid } from "uuid";
+import nodemailer from "nodemailer";
+import sendEmail from "../utils/sendEmails.js";
 
 // POST api/usersl/login
 const authUser = asyncHandler(async (req, res) => {
@@ -9,12 +12,17 @@ const authUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
+  // if(!user.isverified){
+  //   res.status(500).json({msg: "account is not verified"})
+  // }
+
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user.id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      isVerified: user.isVerified,
       token: generateToken(user.id),
     });
   } else {
@@ -65,6 +73,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+//signup
 // POST /api/users
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -76,7 +85,15 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists");
   }
 
-  const user = await User.create({ name, email, password });
+  const verificationString = uuid();
+
+  const user = await User.create({ name, email, password, verificationString });
+
+  //--------------------------------------
+
+  sendEmail(name, email, verificationString);
+
+  //--------------------------------------
 
   if (user) {
     res.status(201);
@@ -86,6 +103,8 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user.id),
+      verificationString: user.verificationString,
+      isVerified: user.isVerified,
     });
   } else {
     res.status(404);
@@ -111,8 +130,7 @@ const googleAuth = asyncHandler(async (req, res) => {
       isAdmin: userExists.isAdmin,
       token: generateToken(userExists.id),
     });
-  } 
-  else {
+  } else {
     const user = await User.create({
       name,
       email,
@@ -191,6 +209,35 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+// verify Email
+const verifyEmail = asyncHandler(async (req, res) => {
+
+  console.log('inside verify Email');
+
+  const user = await User.findOne({
+    verificationString: req.params.verificationString,
+  });
+
+  if (user) {
+    user.isVerified = true;
+
+    const updatedUser = await user.save();
+
+    console.log(updatedUser);
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      isVerified: updatedUser.isVerified,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 export {
   authUser,
   userProfile,
@@ -201,4 +248,5 @@ export {
   updateUser,
   getUserById,
   googleAuth,
+  verifyEmail,
 };

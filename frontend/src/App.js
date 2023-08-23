@@ -18,37 +18,47 @@ import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import VerificationScreen from "./screens/VerificationScreen";
+import PleaseVerifyEmailScreen from "./screens/PleaseVerifyEmailScreen";
 
 const App = () => {
-  
+
   return (
-    <>
-    <GoogleOAuthProvider>
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/admin/productList" element={<ProductListScreen />} />
-          <Route path="/admin/product/:id/edit" element={<ProductEditScreen />} />
-          <Route path="/admin/userList" element={<UserListScreen />}  />
-          <Route path="/admin/user/:id/edit" element={<UserEditScreen />}  />
-          <Route path="/admin/orderList" element={<OrderListScreen />} />
-          <Route path="/order/:id" element={<OrderScreen />} exact />
-          <Route path="/placeorder" element={<PlaceOrderScreen />}  />
-          <Route path="/shipping" element={<ShippingScreen />}  />
-          <Route path="/payment" element={<PaymentScreen />}  />
-          <Route path="/login" element={<LoginScreen />}  />
-          <Route path="/register" element={<RegisterScreen />}  />
-          <Route path="/profile" element={<ProfileScreen />}  />
-          <Route path="/" element={<HomeScreen />}  exact/>
-          <Route path="/search/:keyword" element={<HomeScreen />} />
-          <Route path="/products/:id" element={<ProductScreen />} />
-          <Route path="/cart" element={<CartScreen />} />
-          <Route path="/cart/:id" element={<CartScreen />} />
-        </Routes>
+    <div className="app-container">
+      <div>
+
+        <GoogleOAuthProvider>
+          <Router>
+            <Header />
+            <Routes>
+              <Route path="/admin/productList" element={<ProductListScreen />} />
+              <Route path="/admin/product/:id/edit" element={<ProductEditScreen />} />
+              <Route path="/admin/userList" element={<UserListScreen />} />
+              <Route path="/admin/user/:id/edit" element={<UserEditScreen />} />
+              <Route path="/admin/orderList" element={<OrderListScreen />} />
+              <Route path="/order/:id" element={<OrderScreen />} exact />
+              <Route path="/placeorder" element={<PlaceOrderScreen />} />
+              <Route path="/shipping" element={<ShippingScreen />} />
+              <Route path="/payment" element={<PaymentScreen />} />
+              <Route path="/login" element={<LoginScreen />} />
+              <Route path="/register" element={<RegisterScreen />} />
+              <Route path="/profile" element={<ProfileScreen />} />
+              <Route path="/" element={<HomeScreen />} exact />
+              <Route path="/search/:keyword" element={<HomeScreen />} />
+              <Route path="/products/:id" element={<ProductScreen />} />
+              <Route path="/cart" element={<CartScreen />} />
+              <Route path="/cart/:id" element={<CartScreen />} />
+              <Route path="/verify-email/:verificationString" element={<VerificationScreen />} />
+              <Route path="/please-verify" element={<PleaseVerifyEmailScreen />} />
+            </Routes>
+          </Router>
+        </GoogleOAuthProvider>
+      </div>
+
+      <div>
         <Footer />
-      </Router>
-      </GoogleOAuthProvider>
-    </>
+      </div>
+    </div>
   );
 };
 

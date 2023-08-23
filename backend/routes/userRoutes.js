@@ -9,6 +9,7 @@ import {
   getUserById,
   updateUser,
   googleAuth,
+  verifyEmail,
 } from "../controllers/userController.js";
 import { fetchUser, adminAuth } from "../middlewares/fetchUser.js";
 
@@ -28,5 +29,7 @@ router
   .delete(fetchUser, adminAuth, deleteUser)
   .get(fetchUser, adminAuth, getUserById)
   .put(fetchUser, adminAuth, updateUser);
+
+router.route("/verify-email/:verificationString").put(verifyEmail);
 
 export default router;

@@ -7,6 +7,7 @@ import Message from "../components/Message.js";
 import Loader from "../components/Loader";
 import { useParams } from "react-router-dom";
 import ProductCarousel from "../components/ProductCarousel";
+import { ORDER_DETAILS_RESET } from "../constants/orderConstants";
 
 const HomeScreen = () => {
   const params = useParams();
@@ -15,15 +16,28 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
 
   const productList = useSelector((state) => state.productList);
+  const userLogin = useSelector((state) => state.userLogin);
+
   const { loading, error, products } = productList;
+  const { userInfo } = userLogin;
+  const { isVerified } = userInfo || false;
+
+  console.log(isVerified);
 
   useEffect(() => {
     dispatch(listProducts(keyword));
   }, [dispatch, keyword]);
 
+  useEffect(() => {
+    dispatch({ type: ORDER_DETAILS_RESET })
+  }, []);
+
   return (
     <>
       <Container className="py-3 home-screen-container">
+        {userInfo && !isVerified && (
+          <Message variant="danger">Please Verify Your Email</Message>
+        )}
         <h1>welcome to Super Works Store</h1>
         {!keyword && <ProductCarousel />}
         <h1>Latest Products</h1>

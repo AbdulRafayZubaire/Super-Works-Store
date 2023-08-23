@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 
 const Rating = ({ value, numReviews, color }) => {
 
+  console.log("value", value);
+  console.log("reviews", numReviews);
+  console.log("color", color);
   return (
     <div className="rating">
       <span>

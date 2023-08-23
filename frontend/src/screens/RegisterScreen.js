@@ -17,13 +17,14 @@ const RegisterScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userRegister = useSelector((state) => state.userRegister);
-  const {error, loading, userInfo} = userRegister
+  const {error, loading, userInfo, verificationString} = userRegister
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
   useEffect(() => {
     if (userInfo) {
-      navigate(redirect);
+      // navigate(redirect);
+      navigate('/please-verify');
     }
   }, [userInfo, redirect, navigate]);
     

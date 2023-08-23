@@ -3,9 +3,9 @@ import { Container } from 'react-bootstrap'
 
 const Footer = () => {
   return (
-    <Container className='footer-container'>
-    <footer>footer copy</footer>
-    </Container>
+    <div className='footer-container'>
+    <footer></footer>
+    </div>
   )
 }
 

@@ -31,6 +31,7 @@ import {
   USER_LOGIN_GOOGLE_REQUEST,
   USER_LOGIN_GOOGLE_SUCCESS,
   USER_LOGIN_GOOGLE_FAILURE,
+  EMAIL_VERIFY_REQUEST,
 } from "../constants/userConstants";
 
 const login = (email, password) => async (dispatch) => {
@@ -308,6 +309,8 @@ const updateUser = (user) => async (dispatch, getState) => {
   }
 };
 
+
+
 export {
   login,
   logout,
@@ -317,5 +320,5 @@ export {
   listUsers,
   deleteUser,
   updateUser,
-  googleAuth
+  googleAuth,
 };

@@ -26,8 +26,14 @@ h2{
 }
 
 .footer-container{
-    position: absolute;
     text-align: center;
+    margin-top: 200px;
+    background-color: rgb(163, 162, 162);
+    width: 100%;
+    padding: 20px;
+    font-size: 30px;
+    color: black;
+    height: 90px;
 }
 
 /* carousel */
@@ -56,3 +62,19 @@ h2{
 .carousel a {
   margin: 0 auto;
 }
+
+.google-button{
+  height: 100px;
+  width: 300px;
+  background-color: blue;
+  color: white;
+  font-weight: bold;
+}
+
+.app-container{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+

@@ -2,10 +2,10 @@ import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 
-const fetchUser = asyncHandler(async (req, res, next) => {
+const fetchUser = asyncHandler(async (req,res, next) => {
 
 
-
+	// Bearer akjsbfjakbfkjasbdb
   let token;
   if (
     req.header("auth-token") &&

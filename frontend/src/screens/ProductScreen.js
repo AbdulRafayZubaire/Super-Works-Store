@@ -46,16 +46,16 @@ const ProductScreen = () => {
 
   useEffect(() => {
 
-    if(successReview){
+    if (successReview) {
       setRating(0);
       setComment('');
       dispatch(listProductDetails(params.id))
-    } 
+    }
     if (!product._id || product._id !== params.id) {
       dispatch(listProductDetails(params.id))
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
     }
-  }, [dispatch, successReview, params, product._id, comment, rating ]);
+  }, [dispatch, successReview, params, product._id, comment, rating]);
 
   //Handler Function
   const addToCartHandler = () => {
@@ -105,11 +105,14 @@ const ProductScreen = () => {
                   </ListGroup.Item>
                   <ListGroup.Item>
                     {/* ----------------- RATING COMPONENT ---------------- */}
-                    <Rating
-                      value={product.rating}
-                      numReviews={product.numReviews}
-                      color="blue"
-                    />
+                    {!loading &&
+                      (
+                        <Rating
+                          value={product.rating}
+                          numReviews={product.numReviews}
+                          color="blue"
+                        />
+                      )}
                   </ListGroup.Item>
                   <ListGroup.Item>Price: {product.price}</ListGroup.Item>
                   <ListGroup.Item>
@@ -183,10 +186,10 @@ const ProductScreen = () => {
                 <h2>Reviews</h2>
                 {product.reviews.length === 0 && <Message>No Reviews</Message>}
                 <ListGroup variant="flush">
-                  {product.reviews.map((review) => (
+                  {!loading && product.reviews.map((review) => (
                     <ListGroup.Item key={review._id}>
                       <strong>{review.name}</strong>
-                      <Rating value={review.rating} />
+                      <Rating value={review.rating} numReviews={1} />
                       <p>{review.createdAt.substring(0, 10)}</p>
                       <p>{review.comment}</p>
                     </ListGroup.Item>
