@@ -9,6 +9,7 @@ import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 dotenv.config();
 connectDB();
 
+
 const app = express();
 
 if (process.env.NODE_ENV === "development") {
